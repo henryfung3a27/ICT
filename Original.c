@@ -4,8 +4,8 @@
 #include <mysql/mysql.h>
 #include <time.h>
 
-#define FILE "F5C09_10_2.exe"		// <<-----------------------------------------
-#define TABLE "record"
+#define FILE "Original.exe"		// <<-----------------------------------------
+#define TABLE "testing"
 
 int m[9] = {0,0,0,0,0,0,0,0,0};
 int move[9] = {0,0,0,0,0,0,0,0,0};		// move[0] = 1st button tapped
@@ -97,7 +97,7 @@ void player_move() {
       skip = 1;
 }
 
-void computer_move() {
+void random_move() {
 	srand(time(NULL));
 	int r;
 	do {
@@ -245,13 +245,57 @@ int insert_record() {
     }    
 }
 
-
+int select_records(){
+	char sql[120];
+	char a1[2];
+	char a2[2];
+	char a3[2];
+	char a4[2];
+	char a5[2];
+	char a6[2];
+	char a7[2];
+	char a8[2];
+	char a9[2];
+	char wingame[2];
+	
+	sprintf( sql, "SELECT * FROM %s where wingame = %d", TABLE, odd_even(round_num) == 1? 2:1);
+	
+    if (mysql_query(conn, sql)) {
+        printf( "Fail to query student: %s\n", mysql_error(conn));
+        return(0);
+    }    
+    else {
+        result = mysql_store_result(conn);    
+        if (result)  // if there are rows
+        {
+            num_fields = mysql_num_fields(result);
+            while ((row = mysql_fetch_row(result)) > 0) {
+                 strcpy( a1, row[0] );
+                 strcpy( a2, row[1] );
+                 strcpy( a3, row[2] );
+                 strcpy( a4, row[3] );
+                 strcpy( a5, row[4] );
+                 strcpy( a6, row[5] );
+                 strcpy( a7, row[6] );
+                 strcpy( a8, row[7] );
+                 strcpy( a9, row[8] );
+                 strcpy( wingame, row[9] );
+					  printf( "%s %s %s %s %s %s %s %s %s %s\n"\
+					  				, a1, a2, a3, a4, a5, a6, a7, a8, a9, wingame);
+            }            
+            mysql_free_result(result);
+        }
+    }
+    return(0);
+}
 
 
 main() {
 	output_header();
 	printf("<h4>%s</h4><br>", FILE);
 	receive_input();
+	move_sequence();
+	open_db();
 	status();
 	if (game_result == 0) {
 		if (odd_even(round_num) == 1 && turn == 1) {
@@ -265,19 +309,18 @@ main() {
 	}
 	if (game_result == 0 && skip == 0) {
 		if (odd_even(round_num) == 2 && turn == 1) {
-			computer_move();
+			random_move();
 			status();
 		}
 		else if (turn != 1) {
-			computer_move();
+			random_move();
 			status();
 		}
-	}	
+	}
 	move_sequence();
 	board();
 	
 	if (game_result != 0) {
-		open_db();
 		insert_record();
 		close_db();
 		printf("<br><br>Record inserted<br>");
