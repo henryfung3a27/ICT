@@ -10,9 +10,10 @@ node_modules
 # Book build output
 _book
 
-# eBook build output
+ eBook build output
 *.epub
 *.mobi
 *.pdf
-Alter_mysql.exe
-libmysql.dll
+*.exe
+*.dll
+Untitled1.c
