@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <windows.h>
 #include <mysql/mysql.h>
 #include <time.h>
@@ -246,7 +247,7 @@ int insert_record() {
 }
 
 int select_records(){
-	char sql[120];
+	char sql[150];
 	char a1[2];
 	char a2[2];
 	char a3[2];
@@ -257,15 +258,28 @@ int select_records(){
 	char a8[2];
 	char a9[2];
 	char wingame[2];
+	char temp[30] = "and a1 = ";
+	char itoa[3];
 	
-	sprintf( sql, "SELECT * FROM %s where wingame = %d", TABLE, odd_even(round_num) == 1? 2:1);
+	//sprintf( sql, "SELECT * FROM %s where wingame = %d", TABLE, odd_even(round_num) == 1? 2:1);
+	if (move[0] != 0) {
+		sprintf(itoa, "%d", move[0]);
+		strcat(temp, itoa); 
+	}
+	sprintf( sql, "SELECT * FROM %s where wingame = %d %s"\
+		, TABLE, odd_even(round_num) == 1? 2:1, move[0] == 0? "":temp);
+		
+	
+	
+	printf("<br>%s<br>", sql);
 	
     if (mysql_query(conn, sql)) {
         printf( "Fail to query student: %s\n", mysql_error(conn));
         return(0);
     }    
     else {
-        result = mysql_store_result(conn);    
+        result = mysql_store_result(conn);
+        printf("<br>There are %d results.", *result);
         if (result)  // if there are rows
         {
             num_fields = mysql_num_fields(result);
@@ -280,7 +294,7 @@ int select_records(){
                  strcpy( a8, row[7] );
                  strcpy( a9, row[8] );
                  strcpy( wingame, row[9] );
-					  printf( "%s %s %s %s %s %s %s %s %s %s\n"\
+					  printf( "<br>%s %s %s %s %s %s %s %s %s %s\n"\
 					  				, a1, a2, a3, a4, a5, a6, a7, a8, a9, wingame);
             }            
             mysql_free_result(result);
@@ -318,6 +332,7 @@ main() {
 		}
 	}
 	move_sequence();
+	select_records();
 	board();
 	
 	if (game_result != 0) {
