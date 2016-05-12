@@ -247,7 +247,7 @@ int insert_record() {
 }
 
 int select_records(){
-	char sql[150];
+	char sql[500];
 	char a1[2];
 	char a2[2];
 	char a3[2];
@@ -258,13 +258,24 @@ int select_records(){
 	char a8[2];
 	char a9[2];
 	char wingame[2];
-	char temp[30] = "and a1 = ";
-	char itoa[3];
+	char temp[300] = "";
+	char itoa_move[2];
+	char itoa_loop[2];
+	int i;
 	
 	//sprintf( sql, "SELECT * FROM %s where wingame = %d", TABLE, odd_even(round_num) == 1? 2:1);
-	if (move[0] != 0) {
-		sprintf(itoa, "%d", move[0]);
-		strcat(temp, itoa); 
+	for (i = 0; i < 9; i++) {
+		if (move[i] != 0) {
+			sprintf(itoa_loop, "%d", i+1);
+			sprintf(itoa_move, "%d", move[i]);
+			strcat(temp, " and a");
+			strcat(temp, itoa_loop);
+			strcat(temp, "=");
+			strcat(temp, itoa_move);
+		}
+		else break;
+		itoa_move[0] = '\0';
+		itoa_loop[0] = '\0';
 	}
 	sprintf( sql, "SELECT * FROM %s where wingame = %d %s"\
 		, TABLE, odd_even(round_num) == 1? 2:1, move[0] == 0? "":temp);
