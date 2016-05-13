@@ -278,7 +278,7 @@ int select_records(){
 		itoa_loop[0] = '\0';
 	}
 	sprintf( sql, "SELECT * FROM %s where wingame = %d %s"\
-		, TABLE, odd_even(round_num) == 1? 2:1, move[0] == 0? "":temp);
+		, TABLE, odd_even(round_num) == 1? 2:1,temp);
 		
 	
 	
@@ -312,6 +312,10 @@ int select_records(){
         }
     }
     return(0);
+}
+
+void computer_move() {
+
 }
 
 
