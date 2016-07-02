@@ -306,7 +306,7 @@ int select_records(){
                  strcpy( a9, row[8] );
                  strcpy( wingame, row[9] );
 					  printf( "<br>%s %s %s %s %s %s %s %s %s %s\n"\
-					  				, a1, a2, a3, a4, a5, a6, a7, a8, a9, wingame);
+					  				, a1, a2, a3, a4, a5, a6, a7, a8, a9, wingame);	// ------> Can use row[x] instead of a1, a2....??
             }            
             mysql_free_result(result);
         }
@@ -315,7 +315,7 @@ int select_records(){
 }
 
 void computer_move() {
-
+	// Call select_records here ?	  or    Rename select_records -> computer_move ?
 }
 
 
