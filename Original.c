@@ -6,7 +6,7 @@
 #include <time.h>
 
 #define FILE "Original.exe"		// <<-----------------------------------------
-#define TABLE "testing"
+#define TABLE "sba_record"
 
 int m[9] = {0,0,0,0,0,0,0,0,0};
 int move[9] = {0,0,0,0,0,0,0,0,0};		// move[0] = 1st button tapped
@@ -30,7 +30,6 @@ void output_header() {
 void receive_input() {
 	char *data;
 	data = getenv("QUERY_STRING");
-	printf("|%s|<br />\n", data);
 	if (game_result == 0)
 		sscanf(data, "\
 								m1=%d&m2=%d&m3=%d&m4=%d&m5=%d&m6=%d&m7=%d&m8=%d&m9=%d\
@@ -43,7 +42,6 @@ void receive_input() {
 								m1=%d&m2=%d&m3=%d&m4=%d&m5=%d&m6=%d&m7=%d&m8=%d&m9=%d\
 								&turn=%d&round_num=%d&game_result=%d&Button%d\
 							 ");
-	printf( "<h2>turn=%d</h2>", turn);
 }
 
 void board() {
@@ -278,8 +276,8 @@ int select_records(){
 		itoa_loop[0] = '\0';
 	}
 	sprintf( sql, "SELECT * FROM %s where wingame = %d %s"\
-		, TABLE, odd_even(round_num) == 1? 2:1,temp);
-		
+		, TABLE, odd_even(round_num) == 1? 2:1, temp);
+	
 	
 	
 	printf("<br>%s<br>", sql);
@@ -307,9 +305,10 @@ int select_records(){
                  strcpy( wingame, row[9] );
 					  printf( "<br>%s %s %s %s %s %s %s %s %s %s\n"\
 					  				, a1, a2, a3, a4, a5, a6, a7, a8, a9, wingame);	// ------> Can use row[x] instead of a1, a2....??
-            }            
+            }
             mysql_free_result(result);
         }
+        	sprintf(sql, "SELECT * FROM %s where wingame = 3 %s", TABLE, temp);
     }
     return(0);
 }
