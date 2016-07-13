@@ -278,7 +278,13 @@ int select_records(){
 	sprintf( sql, "SELECT * FROM %s where wingame = %d %s"\
 		, TABLE, odd_even(round_num) == 1? 2:1, temp);
 	
+	mysql_query(conn, sql);
+	result = mysql_store_result(conn);
 	
+	if ( mysql_num_rows(result) == 0 ) {
+		sprintf(sql, "SELECT * FROM %s where wingame = 3 %s"\
+		, TABLE, temp);
+	}
 	
 	printf("<br>%s<br>", sql);
 	
